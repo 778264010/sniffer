@@ -72,52 +72,47 @@ class SnifferWindow(QMainWindow):
             # for packet in packets:
             #     self.packets_list.appendPlainText(str(packet.summary()))
 
-    # 停止嗅探器
+
     def stop_sniffing(self):
         self.sniffer.stop()
-    # 处理捕获的数据包
+
     def handle_packet(self, packet):
         self.packets.append(packet)
         self.counter += 1
         self.packets_list.addItem(str(self.counter))
         self.packets_list.addItem(str(packet))
 
-    # 创建新窗口显示16进制数据信息
+
     def show_data(self):
         data_window = QDialog(self)
-        data_window.setWindowTitle("16进制信息")
+        data_window.setWindowTitle("information")
         data_layout = QVBoxLayout(data_window)
 
-        # 显示数据信息
         data_widget = DataWindow(self.packets)
         data_layout.addWidget(data_widget)
 
-        # 显示窗口
         data_window.exec_()
 
-# 定义16进制数据窗口类
+
 class DataWindow(QWidget):
     def __init__(self, packets):
         super().__init__()
 
-        # 创建UI控件
         self.tree = QTreeWidget()
 
-        # 填充数据包信息
         for packet in packets:
             self.add_packet(packet)
 
-        # 设置UI布局
         vbox = QVBoxLayout()
         vbox.addWidget(self.tree)
         self.setLayout(vbox)
 
     def add_packet(self, packet):
-        # 添加数据包节点
-        packet_item = QTreeWidgetItem(self.tree, ["数据包", "", ""])
-        # 获取根节点在QTreeWidget控件中的索引值
+
+        packet_item = QTreeWidgetItem(self.tree, ["packet", "", ""])
+
         index = self.tree.indexOfTopLevelItem(packet_item)
-        # 设置节点的数字编号
+
         packet_item.setText(0, str(index + 1) + ".")
         self.add_layer(packet_item, packet)
 
